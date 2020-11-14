@@ -1,5 +1,5 @@
 #' Functions for aggregrating SpatialCIMIS data
-#' 
+#'
 #' @param etoTable A table containing columns that contain at least the following columns:
 #' \code{"abs_path"}, contining the path to the daily/weekly/monthy raster layers
 #' \code{yearCounter}, a column containing the indexes that you are going to aggregrate _over_
@@ -11,8 +11,8 @@
 #' @return A matrix containing statistics run on all of the values within the summary layer.
 #' @examples
 #' No examples for now
-#' 
-source("R/utilities.R")
+#'
+source("../R_orig/utilities.R")
 
 pkgTest("rgdal", "raster")
 

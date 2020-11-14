@@ -11,9 +11,9 @@ knitr::opts_knit$set(echo = TRUE, root.dir = '../', warning = TRUE, collapse = T
 ```
 
 ```{r setupEnv, include=FALSE}
-source("R/utilities.R")
-source("R/kc.R")
-source("R/eto.R")
+source("../R_orig/utilities.R")
+source("../R_orig/kc.R")
+source("../R_orig/eto.R")
 
 pkgTest("rgdal", "raster", "tools", "lubridate", "parallel")
 rasterOptions(progress = "text", tmpdir = "D:/lbooth/tmp", time = TRUE)
@@ -39,8 +39,8 @@ boundaries, however all inherit the default `WGS 84 / Lon Lat` CRS, reproduced b
 ```{r loadData}
 # ca_boundary defines the boundary for the area/(s) of analysis (includes counties)
 # ca_boundary <- readOGR("input/MAPS/cb_2014_CA_5m.shp", layer="cb_2014_CA_5m")
-ca_boundary.path <- "Input/SHAPEFILES/cnty24k09/cnty24k09_state_poly_s100.shp"
-lc.dir <- "input/CDL_CA_WGS84"
+ca_boundary.path <- "C:/Users/shivn/Box/wfar/input/SHAPEFILES/cnty24k09/cnty24k09_state_poly_s100.shp"
+lc.dir <- "C:/Users/shivn/Box/wfar/input/CDL_CA_WGS84"
 lc.crs <- CRS("+init=epsg:4326")
 ```
 
@@ -87,7 +87,7 @@ resample_cdl <- function(lc.table, abs_path, source, product_name) {
   outpath <- paste0("output/cleaned_inputs/", source, "_30m/", product_name, ".tif")
   resample(raster(abs_path), raster(lc.table[["abs_path"]][nrow(lc.table)]), 
            method = "ngb", filename = outpath, format = "GTiff", 
-           prj = TRUE, progress = "text", datatype = "INT1U", overwrite = TRUE)
+           prj = FALSE, progress = "text", datatype = "INT1U", overwrite = TRUE)
 }
 
 # TODO: Figure out why apply returns extra row, creating NA directory
@@ -97,6 +97,7 @@ resample_cdl <- function(lc.table, abs_path, source, product_name) {
 #         resample_cdl(lc.table, x["abs_path"], x["source"], x["product_name"]))
 
 # Make only as many clusters as necessary, bound by available cores
+
 cl <- makeCluster(min((detectCores() - 1), sum(lc.table["anoml"] == TRUE)))
 clusterExport(cl, list("lc.table", "resample_cdl"))
 clusterEvalQ(cl,library(raster))
@@ -118,7 +119,7 @@ project_cdl <- function(lc.table, abs_path, source, product_name) {
 cl <- makeCluster(min((detectCores() - 1), nrow(lc.table)), outfile = "debug.txt")
 clusterExport(cl, list("lc.table", "project_cdl"))
 clusterEvalQ(cl,library(raster))
-parRapply(cl, lc.table,  
+parRapply(cl, lc.table,
        function(x) 
          project_cdl(lc.table, x["abs_path"], x["source"], x["product_name"]))
 stopCluster(cl)

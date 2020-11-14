@@ -14,8 +14,8 @@ knitr::opts_chunk$set(cache=TRUE)
 source("../R_orig/utilities.R")
 source("../R/kc_prep.R")
 
-input_folder <- "Q:/VICE Lab/RESEARCH/PROJECTS/wfar/input/"
-output_folder <- "C:/Users/dsx/CodeLocal/waffr_pre-release-master/output/"
+input_folder <- "C:/Users/shivn/Box/wfar/input/"
+output_folder <- "C:/Users/shivn/Documents/waffr/"
 
 pkgTest("tools", "readr", "lubridate", "ggplot2")
 ```

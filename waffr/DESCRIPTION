@@ -13,6 +13,8 @@ Imports:
 	readr,
 	ggplot2,
 	lubridate,
-	tools
+	tools,
+	rgdal,
+	parallel
 Suggests: 
     testthat
